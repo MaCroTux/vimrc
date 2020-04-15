@@ -4,7 +4,9 @@ syntax on
 
 set nowrap
 set encoding=utf8
+set relativenumber
 
+let vimDir='$HOME/.vim'
 
 """" START Vundle Configuration
 " Disable filetypefor vundle
@@ -34,7 +36,7 @@ set expandtab
 set laststatus=2
 
 " Enable Elite mode, No ARRRROWWS!!!!
-let g:elite_mode=1
+" let g:elite_mode=1
 
 " Enable highlighting of the current line
 set cursorline
@@ -58,10 +60,13 @@ Plugin 'godlygeek/tabular'
 Plugin 'jeetsukumaran/vim-buffergator' " \b
 Plugin 'gilsondev/searchtasks.vim'
 Plugin 'Shougo/neocomplete.vim'
+Plugin 'bpearson/vim-phpcs'
+" let Vimphpcs_Standard='STANDARDNAME'
+let Vimphpcs_Phpcscmd='php phpcs.phar '
 
 " Generic Programming Support
 Plugin 'Townk/vim-autoclose'
-Plugin 'vim-syntastic/syntastic'
+Plugin 'vim-syntastic/syntastic'  "Sustituir por ALE
 
 " Markdown / Writting
 Plugin 'reedes/vim-pencil'
@@ -74,6 +79,9 @@ Plugin 'kablamo/vim-git-log'
 Plugin 'gregsexton/gitv'
 Plugin 'tpope/vim-fugitive'
 Plugin 'jaxbot/github-issues.vim'
+
+" default updatetime 4000ms is not good for async update
+let g:gitgutter_max_signs = 100
 
 " Theme / Interface
 Plugin 'AnsiEsc.vim'
@@ -88,15 +96,41 @@ Plugin 'chriskempson/base16-vim'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'junegunn/limelight.vim'
 
-
 Plugin 'daylerees/colour-schemes'
 Plugin 'ajh17/Spacegray.vim'
+
+Plugin '2072/PHP-Indenting-for-VIm'
+
+Plugin 'StanAngeloff/php.vim'
+Bundle 'stephpy/vim-php-cs-fixer'
+
+" autocmd FileType php autocmd BufWritePre <buffer> call CodeSniff()
+
+" Put this function at the very end of your vimrc file.
+
+function! PhpSyntaxOverride()
+  " Put snippet overrides in this function.
+  hi! link phpDocTags phpDefine
+  hi! link phpDocParam phpType
+endfunction
+
+augroup phpSyntaxOverride
+  autocmd!
+  autocmd FileType php call PhpSyntaxOverride()
+augroup END
+
+left g:php_syntax_extensions_enabled
+left b:php_syntax_extensions_enabled
 
 
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-nmap <Leader>l :Limelight!! 0.4<CR>
+call plug#begin('~/nvim/plugged')
+Plug 'tpope/vim-fugitive'
+call plug#end()
+
+nnoremap <Leader>l :Limelight!! 0.4<CR>
 
 let g:rehash256 = 1
 let g:molokai_original = 1
@@ -141,14 +175,18 @@ let g:searchtasks_list=["TODO", "FIXME", "error"]
 " Key maps
 nmap <F8> :TagbarToggle<CR>
 nmap <F2> :NERDTreeToggle<CR>
-nmap <F3> :vs<CR>
+nmap <F3> :BufOnly<CR>
 nmap <F4> :BuffergatorToggle<CR>
 nmap <F5> :Gitv<CR>
+" namp <F7> :!zsh<CR>
+
+" autocmd BufWritePre <buffer> call :SyntasticCheck
 " Nerdtree
 " Initialize with :NERDTree .
 " Iniciar NerdTree al abrir VIM
 " autocmd vimenter * NERDTree
 
+nnoremap <Space> :bprev<CR>
 
 " Generación de tags
 command! MakeTags !ctags -R --languages=php,ruby . &> /dev/null &
@@ -156,8 +194,9 @@ augroup PreSaveTasks
     autocmd!
     autocmd BufWritePre *.php :silent MakeTags
     autocmd BufWritePre *.rb :silent MakeTags
+    autocmd BufWritePre *.php :CodeSniff
     " Elimina espacios al guardar
-    autocmd BufWritePre * :%s/\s\+$//e
+"    autocmd BufWritePre * :%s/\s\+$//e
 augroup END
 
 function! FindConfig(prefix, what, where)
@@ -168,3 +207,35 @@ endfunction
 autocmd FileType javascript let b:syntastic_javascript_jscs_args =
     \ get(g:, 'syntastic_javascript_jscs_args', '') .
     \ FindConfig('-c', '.jscsrc', expand('<afile>:p:h', 1))
+
+" Your vimrc
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+set statusline+=%{GitStatus()}
+
+" TODOTags personalizados
+augroup CustomTODOTags
+    autocmd!
+    autocmd BufWinEnter * let w:m1=matchadd('Error', '\<BROKEN\>\|\<WTF\>', -1)
+    autocmd BufWinEnter * let w:m1=matchadd('Todo', '\<HACK\>\|\<BUG\>\|\<REVIEW\>\|\<FIXME\>\|\<TODO\>\|\<NOTE\>', -1)
+augroup END
+
+" Movimiento de líneas
+nnoremap a :move-2<cr>==
+nnoremap z :move+<cr>==
+" Movimiento de selección
+xnoremap a :move-2<cr>gv=gv
+xnoremap z :move'>+<cr>gv=gv
+
+" Mantenimiento de histórico de cambios persistente
+if has('persistent_undo')
+    let myUndoDir=expand(vimDir . '/undodir')
+    call system('mkdir ' . vimDir)
+    call system('mkdir ' . myUndoDir)
+    let &undodir=myUndoDir
+    set undofile
+endif
+
+" nnoremap <F6> <Ctrl-]>
