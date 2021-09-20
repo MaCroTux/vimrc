@@ -1,4 +1,4 @@
-"█╗███╗░░██╗██╗████████╗░░░██╗░░░██╗██╗███╗░░░███╗
+"██╗███╗░░██╗██╗████████╗░░░██╗░░░██╗██╗███╗░░░███╗
 "██║████╗░██║██║╚══██╔══╝░░░██║░░░██║██║████╗░████║
 "██║██╔██╗██║██║░░░██║░░░░░░╚██╗░██╔╝██║██╔████╔██║
 "██║██║╚████║██║░░░██║░░░░░░░╚████╔╝░██║██║╚██╔╝██║
@@ -53,6 +53,9 @@ nmap <leader>gs  :CocSearch
 nmap <leader>fs :FZF<CR>
 nmap <leader>rg :Rg<CR>
 
+nnoremap <Space><Right> :vs<CR>
+nnoremap <Space><Down> :split<CR>
+
 "configuracion de tabs
 let g:indentLine_enabled = 1
 let g:indentLine_char = '▏'
@@ -63,7 +66,7 @@ let g:indentLine_char = '▏'
 "open cocExplorer
 "Buscar dos carácteres con easymotion
 "Search for two chars with easymotion
-nmap <Leader>s <Plug>(easymotion-s2)
+nmap <leader>s <Plug>(easymotion-s2)
 
 " TAB in general mode will move to text buffer
 " TAB en modo normal se moverá al siguiente buffer
@@ -78,4 +81,6 @@ nmap <leader>bd :bdelete<CR>
 set termguicolors
 "--------------------------------------------
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml, *.jsx, *.js'
+
+nnoremap <leader>kp :let @*=expand("%")<CR>
 
