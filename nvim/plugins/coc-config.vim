@@ -203,13 +203,20 @@ nmap <space>f :CocCommand explorer --preset floating<CR>
 autocmd BufEnter * if (winnr("$") == 1 && &filetype == 'coc-explorer') | q | endif
 
 let g:coc_global_extensions = [
-    \ 'coc-tsserver',
+    \ 'coc-yaml', 
+    \ 'coc-godot', 
+    \ 'coc-sql', 
+    \ 'coc-db',
+    \ 'coc-snippets',
+    \ 'coc-php-cs-fixer',
+    \ 'coc-pyright',
+    \ 'coc-metals',
     \ 'coc-json',
     \ 'coc-html',
     \ 'coc-css',
     \ 'coc-phpls',
     \ 'coc-python',
-	\ 'coc-diagnostic'
+	  \ 'coc-diagnostic'
  \]
 
 " navigate chunks of current buffer
@@ -222,3 +229,17 @@ nmap ]c <Plug>(coc-git-nextconflict)
 nmap gs <Plug>(coc-git-chunkinfo)
 " show commit contains current position
 nmap gc <Plug>(coc-git-commit)
+
+function! DropTraceParam(method, params) abort
+  unlet a:params.trace
+  return a:params
+endfunction
+
+let g:lsc_server_commands = {
+    \ 'python': 'pyls',
+    \ 'php': {
+    \    'name': 'php-language-server',
+    \    'command': 'php /home/bodqhrohro/.composer/vendor/felixfbecker/language-server/bin/php-language-server.php',
+    \    'message_hooks': { 'initialize': function('DropTraceParam') },
+    \  }
+    \}

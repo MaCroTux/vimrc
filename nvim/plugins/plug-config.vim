@@ -45,18 +45,6 @@ let g:signify_sign_delete            = '_'
 let g:signify_sign_delete_first_line = '‾'
 let g:signify_sign_change            = '~'
 
-
-
-"treesitter
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "all", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  highlight = {
-    enable = true,              -- false will disable the whole extension
-  },
-}
-EOF
-
 "onedark
 " onedark.vim override: Don't set a background color when running in a terminal;
 if (has("autocmd") && !has("gui_running"))
@@ -81,3 +69,19 @@ if (has("termguicolors"))
     set termguicolors
     "hi LineNr ctermbg=NONE guibg=NONE
 endif
+
+function! GotoJump()
+  jumps
+  let j = input("Please select your jump: ")
+  if j != ''
+    let pattern = '\v\c^\+'
+    if j =~ pattern
+      let j = substitute(j, pattern, '', 'g')
+      execute "normal " . j . "\<c-i>"
+    else
+      execute "normal " . j . "\<c-o>"
+    endif
+  endif
+endfunction
+
+nmap <Leader>j :call GotoJump()<CR>

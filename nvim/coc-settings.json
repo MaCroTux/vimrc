@@ -7,7 +7,7 @@
       "command": "./vendor/bin/phpcs",
       "debounce": 300,
       "rootPatterns": ["composer.json", "composer.lock", "vendor", ".git"],
-      "args": ["--report=emacs", "-s", "-"],
+      "args": ["--report=emacs", "-s", "-", "--standard=WordPress"],
       "offsetLine": 0,
       "offsetColumn": 0,
       "sourceName": "phpcs",
@@ -38,5 +38,19 @@
       "isStdout": false,
       "doesWriteToFile": true
     }
-  }
+  },  
+  "languageserver":{
+    "intelephense": {
+      "command": "intelephense",
+      "args": ["--stdio"],
+      "filetypes": ["php"],
+      "initializationOptions": {
+        "storagePath": "/tmp/intelephense"
+      }
+    }
+  },
+  "php-cs-fixer.rules": "@Symfony,ordered_imports,no_unused_imports",
+  "php-cs-fixer.config": ".php_cs.dist",
+  "php-cs-fixer.allowRisky": true,
+  "json.format.enable": true,
 }
