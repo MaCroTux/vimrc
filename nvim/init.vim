@@ -83,4 +83,5 @@ set termguicolors
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml, *.jsx, *.js'
 
 nnoremap <leader>kp :let @*=expand("%")<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
 

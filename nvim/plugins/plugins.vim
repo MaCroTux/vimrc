@@ -6,6 +6,7 @@ Plug 'morhetz/gruvbox'
 Plug 'kaicataldo/material.vim', { 'branch': 'main' }
 Plug 'joshdick/onedark.vim'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'NLKNguyen/papercolor-theme'
 " "IDE
 Plug 'easymotion/vim-easymotion'
 "Navigate with C-h C-l C-j C-k

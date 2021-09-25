@@ -50,7 +50,7 @@ let g:signify_sign_change            = '~'
 if (has("autocmd") && !has("gui_running"))
   augroup colorset
     autocmd!
-    let s:white = { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" }
+    let s:white = { "gui": "#282C34", "cterm": "145", "cterm16" : "7" }
     "autocmd ColorScheme * call onedark#set_highlight("Normal", { "fg": s:white }) " `bg` will not be styled since there is no `bg` setting:"
   augroup END
 endif
@@ -60,8 +60,16 @@ let g:onedark_hide_endofbuffer=1
 let g:onedark_terminal_italics=1
 let g:onedark_termcolors=256
 let g:gruvbox_dark_hard="medium"
+
+let g:material_terminal_italics = 1
+let g:material_theme_style = 'darker-community'
+
 syntax on
-colorscheme onedark
+
+set background=dark    " Light theme is used by default
+set t_Co=256
+colorscheme PaperColor
+
 
 
 " checks if your terminal has 24-bit color support
